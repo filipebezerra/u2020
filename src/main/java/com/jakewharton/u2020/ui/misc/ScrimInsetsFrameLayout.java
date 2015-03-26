@@ -32,6 +32,8 @@ import com.jakewharton.u2020.R;
  */
 public final class ScrimInsetsFrameLayout extends FrameLayout {
   private Drawable insetForeground;
+  private boolean pad;
+
   private Rect insets;
   private Rect tempRect = new Rect();
 
@@ -56,6 +58,7 @@ public final class ScrimInsetsFrameLayout extends FrameLayout {
       return;
     }
     insetForeground = a.getDrawable(R.styleable.ScrimInsetsView_insetForeground);
+    pad = a.getBoolean(R.styleable.ScrimInsetsView_pad, false);
     a.recycle();
 
     setWillNotDraw(true);
@@ -63,6 +66,10 @@ public final class ScrimInsetsFrameLayout extends FrameLayout {
 
   @Override protected boolean fitSystemWindows(@NonNull Rect insets) {
     this.insets = new Rect(insets);
+    if (pad) {
+      setPadding(insets.left, insets.top, insets.right, insets.bottom);
+    }
+
     setWillNotDraw(insetForeground == null);
     ViewCompat.postInvalidateOnAnimation(this);
     return true; // consume insets
